@@ -20,7 +20,7 @@ server.use(require('helmet')());
 // -Catch all endpoint
 server.use('*', (req, res, next) => {
   // res.json({ message: 'catch all endpoint!' });
-  res.sendFile(path.join(rootDir, 'views', 'index.html'));
+  res.sendFile(path.join(rootDir, 'public', 'views', 'index.html'));
 });
 
 // ==============================================

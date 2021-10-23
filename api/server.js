@@ -3,9 +3,13 @@ const helmet = require('helmet');
 const cors = require('cors');
 const db = require('./data/db-config');
 
+// ==============================================
+
 function getAllUsers() {
   return db('users');
 }
+
+// ==============================================
 
 async function insertUser(user) {
   // WITH POSTGRES WE CAN PASS A "RETURNING ARRAY" AS 2ND ARGUMENT TO knex.insert/update
@@ -19,6 +23,8 @@ async function insertUser(user) {
   return newUserObject; // { user_id: 7, username: 'foo', password: 'xxxxxxx' }
 }
 
+// ==============================================
+
 const server = express();
 server.use(express.json());
 server.use(helmet());
@@ -27,7 +33,15 @@ server.use(cors());
 // ==============================================
 
 server.get('/josh', (req, res) => {
-  res.json({ message: 'josh. LOL!' });
+  res.json({ message: 'josh. GET' });
+});
+
+// ==============================================
+
+server.post('/josh', (req, res) => {
+  const body = req.body;
+
+  res.json({ message: body.message });
 });
 
 // ==============================================
