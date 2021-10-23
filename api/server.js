@@ -9,6 +9,10 @@ function getAllUsers() {
   return db('users');
 }
 
+function getAllQuotes() {
+  return db('users');
+}
+
 // ==============================================
 
 async function insertUser(user) {
@@ -21,6 +25,17 @@ async function insertUser(user) {
     'password',
   ]);
   return newUserObject; // { user_id: 7, username: 'foo', password: 'xxxxxxx' }
+}
+
+async function insertQuote(quote) {
+  // WITH POSTGRES WE CAN PASS A "RETURNING ARRAY" AS 2ND ARGUMENT TO knex.insert/update
+  // AND OBTAIN WHATEVER COLUMNS WE NEED FROM THE NEWLY CREATED/UPDATED RECORD
+  // UNLIKE SQLITE WHICH FORCES US DO DO A 2ND DB CALL
+  const [newQuoteObject] = await db('quotes').insert(quote, [
+    'quote_id',
+    'quote',
+  ]);
+  return newQuoteObject;
 }
 
 // ==============================================
@@ -54,6 +69,21 @@ server.get('/api/users', async (req, res) => {
 
 server.post('/api/users', async (req, res) => {
   res.status(201).json(await insertUser(req.body));
+});
+
+// ==============================================
+
+server.get('/api/quotes', async (req, res) => {
+  res.status(201).json(await getAllQuotes());
+});
+
+// ==============================================
+
+server.post('/api/quotes', async (req, res) => {
+  console.log('[POST] /api/quotes -> req.body: ', req.body);
+
+  res.status(201).json(await insertQuote(req.body));
+  // res.status(201).json({ message: 'HI!' });
 });
 
 // ==============================================

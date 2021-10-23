@@ -41,9 +41,16 @@ button_post.addEventListener('click', () => {
 
 // ==============================================
 
+let username_state;
+const username_input = document.querySelector('.username');
+username_input.addEventListener('input', (e) => {
+  username_state = e.target.value;
+  console.log('username_state: ', username_state);
+});
+
 const button_add_user = document.querySelector('.button-add-user');
 button_add_user.addEventListener('click', () => {
-  const form_data = { user_id: 1, username: 'josh', password: 'pw1' };
+  const form_data = { username: username_state, password: 'pw1' };
 
   // https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#uploading_json_data
   fetch('/api/users', {
@@ -75,5 +82,36 @@ button_get_users.addEventListener('click', () => {
     })
     .catch((err) => {
       console.log('.catch() - err: ', err);
+    });
+});
+
+// ==============================================
+
+let quote_state;
+const quote_input = document.querySelector('.quote');
+quote_input.addEventListener('input', (e) => {
+  quote_state = e.target.value;
+  console.log('quote_state: ', quote_state);
+});
+
+const button_add_quote = document.querySelector('.button-add-quote');
+button_add_quote.addEventListener('click', (e) => {
+  const form_data = { quote: quote_state };
+
+  // https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#uploading_json_data
+  fetch('/api/quotes', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(form_data),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log('Success:', data);
+      // message.textContent = data.message;
+    })
+    .catch((error) => {
+      console.error('Error:', error);
     });
 });
